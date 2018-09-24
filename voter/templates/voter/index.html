@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>VOTING ID : {{voting.id}}</h1>
+<form action="/voter/vote/" method="post">{% csrf_token %}
+<fieldset>
+    <legend>Vote correctly</legend>
+    <input type="hidden" value="{{ user }}" name="user">
+    <input type="hidden" value="{{ voting.id }}" name="vote_id">
+    {% for option in options %}
+    <div>
+        <input type="radio" id={{option.number}}
+               value={{option.number}} name="option"/>
+        <label for={{ option.number }} >{{ option.content }}</label>
+    </div>
+    {% endfor %}
+    <input type="submit" value="Submit">
+</fieldset>
+</form>
+</body>
+</html>
