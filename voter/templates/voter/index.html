@@ -6,11 +6,9 @@
 </head>
 <body>
 <h1>VOTING ID : {{voting.id}}</h1>
-<form action="/voter/vote/" method="post">{% csrf_token %}
+<form action="{% url 'vote' voting.id%}" method="post">{% csrf_token %}
 <fieldset>
     <legend>Vote correctly</legend>
-    <input type="hidden" value="{{ user }}" name="user">
-    <input type="hidden" value="{{ voting.id }}" name="vote_id">
     {% for option in options %}
     <div>
         <input type="radio" id={{option.number}}

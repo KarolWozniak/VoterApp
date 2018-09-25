@@ -1,52 +1,48 @@
-from django.db.models import Count
-from django.http import Http404, JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.template import loader
+from django.shortcuts import get_object_or_404, redirect
 
 from voter.models import Voting, Vote, Option
 
 
-def get_voting(res, id):
-    try:
-        voting = Voting.objects.get(pk=id)
-    except Voting.DoesNotExist:
-        raise Http404("Unfortunately voting is not exist!")
+def get_voting(req, voting_id):
+    voting = get_object_or_404(Voting.objects, pk=voting_id)
     options = voting.option_set.all()
-    counted_options = Vote.objects.values('option_num').annotate(co_numb=Count('option_num'))
-    options_names = []
-    results = [0] * len(options)
-    for a in options:
-        options_names.append(a.content)
-    for votes in counted_options:
-        results[votes['option_num']] = votes['co_numb']
     template = loader.get_template('voter/index.html')
     context = {
         'voting': voting,
-        'votes': results,
         'options': options,
-        'user': 'tomasz'
+        'user': 'temp_user'
     }
-    return HttpResponse(template.render(context, res))
+    return HttpResponse(template.render(context, req))
 
 
-def post_voting(res, author, options):
-    voting = Voting.objects.create(author=author)
-    voting.save()
-    options = options.split(',')
-    for i, a in enumerate(options):
-        temp = Option.objects.create(voting_id=voting, content=a, number=i)
-        temp.save()
-    return JsonResponse({'id': voting.id})
+def post_voting(req):
+    template = loader.get_template('voter/editor.html')
+    context = {}
+    return HttpResponse(template.render(context, req))
 
 
-def vote(res):
-    if res.method == "POST":
-        user = res.POST.get('user')
-        option = res.POST.get('option')
-        vote_id = res.POST.get('vote_id')
-    try:
-        voting = Voting.objects.get(pk=vote_id)
-    except Voting.DoesNotExist:
-        raise Http404("Unfortunately voting is not exist!")
-    vote_obj = Vote(user_name=user, option_num=option, voting_id=voting)
+def vote(req, voting_id):
+    if req.method == "POST":
+        option = req.POST.get('option')
+    voting = get_object_or_404(Voting.objects, pk=voting_id)
+    vote_obj = Vote(user_name='user', option_num=option, voting_id=voting)
     vote_obj.save()
     return JsonResponse({'response': 'OK'})
+
+
+def monitor(req, voting_id):
+    return JsonResponse({'response': 'OK'})
+
+
+def add_voting(req):
+    voting = Voting.objects.create(author='temp_user')
+    voting.save()
+    index = 0
+    if req.method == "POST":
+        for _, value in req.POST.items():
+            temp = Option.objects.create(voting_id=voting, content=value, number=index)
+            temp.save()
+            index += 1
+    return redirect('monitor', voting_id=voting.id)
