@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404, redirect
@@ -19,8 +20,7 @@ def get_voting(req, voting_id):
 
 def post_voting(req):
     template = loader.get_template('voter/editor.html')
-    context = {}
-    return HttpResponse(template.render(context, req))
+    return HttpResponse(template.render({}, req))
 
 
 def vote(req, voting_id):
@@ -33,16 +33,25 @@ def vote(req, voting_id):
 
 
 def monitor(req, voting_id):
-    return JsonResponse({'response': 'OK'})
+    voting = get_object_or_404(Voting.objects, pk=voting_id)
+    counted_options = Vote.objects.values('option_num')\
+        .annotate(co_numb=Count('option_num'))\
+        .filter(voting_id=voting)
+    results = [0] * len(Option.objects.filter(voting_id=voting))
+    for a in counted_options:
+        results[a['option_num']] = a['co_numb']
+    context = {'voting': voting,
+               'results': results}
+    template = loader.get_template('voter/monitor.html')
+    return HttpResponse(template.render(context, req))
 
 
 def add_voting(req):
     voting = Voting.objects.create(author='temp_user')
     voting.save()
-    index = 0
     if req.method == "POST":
-        for _, value in req.POST.items():
+        option_list = req.POST.getlist('option')
+        for index, value in enumerate(option_list):
             temp = Option.objects.create(voting_id=voting, content=value, number=index)
             temp.save()
-            index += 1
     return redirect('monitor', voting_id=voting.id)
