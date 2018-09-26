@@ -1,8 +1,22 @@
 from django.db import models
+from django.db.models import Count
 
 
 class Voting(models.Model):
     author = models.CharField(max_length=30)
+
+    @property
+    def get_results(self):
+        temp = self.vote_set.values('option_num').annotate(co_numb=Count('option_num'))
+        results = [0] * len(self.option_set.all())
+        for a in temp:
+            results[a['option_num']] = a['co_numb']
+        return zip(self.get_options, results)
+
+    @property
+    def get_options(self):
+        options = self.option_set.all()
+        return options.values_list('content', flat=True)
 
 
 class Vote(models.Model):

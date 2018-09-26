@@ -9,11 +9,11 @@
 <form action="{% url 'vote' voting.id%}" method="post">{% csrf_token %}
 <fieldset>
     <legend>Vote correctly</legend>
-    {% for option in options %}
+    {% for option in voting.get_options %}
     <div>
-        <input type="radio" id={{option.number}}
-               value={{option.number}} name="option"/>
-        <label for={{ option.number }} >{{ option.content }}</label>
+        <input type="radio" id={{forloop.counter0}}
+               value={{forloop.counter0}} name="option"/>
+        <label for={{ forloop.counter0 }} >{{ option }}</label>
     </div>
     {% endfor %}
     <input type="submit" value="Submit">

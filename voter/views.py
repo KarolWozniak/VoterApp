@@ -1,26 +1,20 @@
-from django.db.models import Count
-from django.http import JsonResponse, HttpResponse
-from django.template import loader
-from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
 from voter.models import Voting, Vote, Option
 
 
 def get_voting(req, voting_id):
     voting = get_object_or_404(Voting.objects, pk=voting_id)
-    options = voting.option_set.all()
-    template = loader.get_template('voter/index.html')
     context = {
         'voting': voting,
-        'options': options,
         'user': 'temp_user'
     }
-    return HttpResponse(template.render(context, req))
+    return render(req, 'voter/index.html', context)
 
 
 def post_voting(req):
-    template = loader.get_template('voter/editor.html')
-    return HttpResponse(template.render({}, req))
+    return render(req, 'voter/editor.html')
 
 
 def vote(req, voting_id):
@@ -34,16 +28,7 @@ def vote(req, voting_id):
 
 def monitor(req, voting_id):
     voting = get_object_or_404(Voting.objects, pk=voting_id)
-    counted_options = Vote.objects.values('option_num')\
-        .annotate(co_numb=Count('option_num'))\
-        .filter(voting_id=voting)
-    results = [0] * len(Option.objects.filter(voting_id=voting))
-    for a in counted_options:
-        results[a['option_num']] = a['co_numb']
-    context = {'voting': voting,
-               'results': results}
-    template = loader.get_template('voter/monitor.html')
-    return HttpResponse(template.render(context, req))
+    return render(req, 'voter/monitor.html', {'voting': voting})
 
 
 def add_voting(req):

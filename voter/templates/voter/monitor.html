@@ -6,8 +6,8 @@
 </head>
 <body>
 <h1>VOTING NUMBER : {{voting.id}}</h1>
-{% for a in results %}
-<p>Option number {{ forloop.counter0 }} : {{a}}</p>
+{% for a in voting.get_results %}
+<p>{{a.0}} : {{a.1}}</p>
 {% endfor %}
 </body>
 </html>
