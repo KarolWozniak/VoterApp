@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>VOTING ID : {{voting.id}}</h1>
-<form action="{% url 'vote' voting.id%}" method="post">{% csrf_token %}
+<form action="" method="post">{% csrf_token %}
 <fieldset>
     <legend>Vote correctly</legend>
     {% for option in voting.get_options %}

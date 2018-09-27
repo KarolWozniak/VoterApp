@@ -19,7 +19,7 @@
 </head>
 <body>
 <button type="button" onclick="addField()">Add option</button>
-    <form id="container" action="{% url 'add' %}" method="POST">
+    <form id="container" action="" method="POST">
         {% csrf_token %}
     <legend>Add your options</legend>
     <input type="submit" value="Submit">
