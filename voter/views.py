@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django.views import View
@@ -12,23 +13,31 @@ class VotingDetailView(DetailView):
     def post(self, req, pk):
         option = req.POST.get('option')
         voting = get_object_or_404(Voting.objects, pk=pk)
-        vote_obj = Vote(user_name='user', option_num=option, voting_id=voting)
+        if req.user.username is not None:
+            user_name = req.user.username
+        else:
+            user_name = 'Anonymous'
+        vote_obj = Vote(user_name=user_name, option_num=option, voting_id=voting)
         vote_obj.save()
         return redirect('monitor', pk=pk)
 
 
-class MonitorVotingDetailView(DetailView):
+class MonitorVotingDetailView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login/'
+    redirect_field_name = 'redirect_to'
     template_name = 'voter/monitor.html'
     model = Voting
 
 
-class EditVotingView(View):
+class EditVotingView(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+    redirect_field_name = 'redirect_to'
 
     def get(self, req):
         return render(req, 'voter/editor.html')
 
     def post(self, req):
-        voting = Voting.objects.create(author='temp_user')
+        voting = Voting.objects.create(author=req.user.username)
         voting.save()
         option_list = req.POST.getlist('option')
         for index, value in enumerate(option_list):
