@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django.views import View
@@ -45,3 +46,16 @@ class EditVotingView(LoginRequiredMixin, View):
             temp.save()
         return redirect('monitor', pk=voting.id)
 
+
+class HomepageView(View):
+
+    def get(self, req):
+        return render(req, 'voter/homepage.html')
+
+    def post(self, req):
+        voting_id = req.POST.get('VotingId')
+        try:
+            voting = Voting.objects.get(pk=voting_id)
+        except ObjectDoesNotExist:
+            return render(req, 'voter/homepage.html', {'message': 'There is no Voting with this ID'})
+        return redirect('detail', pk=voting_id)
