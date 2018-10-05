@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django.views import View
@@ -23,11 +24,16 @@ class VotingDetailView(DetailView):
         return redirect('monitor', pk=pk)
 
 
-class MonitorVotingDetailView(LoginRequiredMixin, DetailView):
+class MonitorVotingDetailView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
     redirect_field_name = 'redirect_to'
-    template_name = 'voter/monitor.html'
-    model = Voting
+
+    def get(self, req, pk):
+        voting = Voting.objects.get(pk=pk)
+        if req.is_ajax():
+            return JsonResponse(voting.get_results_json, safe=False)
+        else:
+            return render(req, 'voter/monitor.html', {'voting': voting})
 
 
 class EditVotingView(LoginRequiredMixin, View):
@@ -55,7 +61,7 @@ class HomepageView(View):
     def post(self, req):
         voting_id = req.POST.get('VotingId')
         try:
-            voting = Voting.objects.get(pk=voting_id)
+            Voting.objects.get(pk=voting_id)
         except ObjectDoesNotExist:
             return render(req, 'voter/homepage.html', {'message': 'There is no Voting with this ID'})
         return redirect('detail', pk=voting_id)

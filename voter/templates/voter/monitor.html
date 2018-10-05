@@ -3,11 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script language="javascript" type="text/javascript">
+    var votes = [];
+    function compare(array1, array2){
+        for(var i=0;i<array1.length;i++){
+            if(array1[i]!=array2[i])
+                return false;
+        }
+        return true;
+    }
+    function getData(){
+        $.ajax({
+            type:"GET",
+            dataType:"json",
+            url: window.location.href,
+            success: function(data){
+                var obj = JSON.parse(data);
+                var values = Object.keys(obj).map(function (key) { return obj[key]; });
+                if(compare(values,votes)){
+                    var votingValues = document.getElementsByClassName("values");
+                    var index = 0;
+                    $.each(values, function(i, field){
+                    votingValues[index++].innerHTML = field;
+                    });
+                }else{
+                    votes = values;
+                }
+            },
+        });
+        };
+        setInterval(function () {getData()}, 5000);
+    </script>
 </head>
 <body>
+<div id="content">
 <h1>VOTING NUMBER : {{voting.id}}</h1>
 {% for a in voting.get_results %}
-<p>{{a.0}} : {{a.1}}</p>
+    <b>{{a.0}}</b>
+    <p class="values">: {{a.1}}</p>
 {% endfor %}
+</div>
 </body>
 </html>

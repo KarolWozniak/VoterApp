@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Count
+import json
 
 
 class Voting(models.Model):
@@ -17,6 +18,10 @@ class Voting(models.Model):
     def get_options(self):
         options = self.option_set.all()
         return options.values_list('content', flat=True)
+
+    @property
+    def get_results_json(self):
+        return json.dumps(dict(self.get_results))
 
 
 class Vote(models.Model):
