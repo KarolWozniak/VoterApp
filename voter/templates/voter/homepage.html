@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" href="{% static 'voter/homepage.css' %}">
 </head>
 <body>
 <form action="" method="post">
     {% csrf_token %}
-Type VotingID<input type="text" name="VotingId"><br>
+    <div class="searchform cf">
+        <input type="text" name="VotingId" placeholder="Search Voting">
+        <button type="submit">Search</button>
+    </div>
 </form>
-<p>{{message}}</p>
+<br>
+<p class="info">{{message}}</p>
+<footer>
+<p>Dribbble Rebound of <a target="_blank" href="http://dribbble.com/shots/843289-Search-Bar?list=tags&tag=ui">Search Bar</a> by <a target="_blank" href="http://dribbble.com/craftyliang">Liang Shi</a></p>
+</footer>
 </body>
 </html>

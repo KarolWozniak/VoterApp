@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
 </head>
 <body>
-<h1>VOTING ID : {{voting.id}}</h1>
-<form action="" method="post">{% csrf_token %}
-<fieldset>
-    <legend>Vote correctly</legend>
+<h1 class="title">VOTING ID : {{voting.id}}</h1>
+<form class="form" action="" method="post">
+    {% csrf_token %}
     {% for option in voting.get_options %}
-    <div>
+    <div class="inputGroup">
         <input type="radio" id={{forloop.counter0}}
                value={{forloop.counter0}} name="option"/>
-        <label for={{ forloop.counter0 }} >{{ option }}</label>
+        <label for= {{forloop.counter0}} >{{ option }}</label>
     </div>
     {% endfor %}
-    <input type="submit" value="Submit">
-</fieldset>
+    <input class="button" type="submit" value="Submit">
 </form>
 </body>
 </html>
