@@ -8,20 +8,22 @@ from django.views import View
 from voter.models import Voting, Vote, Option
 
 
-class VotingDetailView(DetailView):
+class VotingDetailView(LoginRequiredMixin, DetailView):
     template_name = 'voter/index.html'
     model = Voting
+    login_url = '/accounts/login/'
+    redirect_field_name = 'redirect_to'
 
     def post(self, req, pk):
         option = req.POST.get('option')
         voting = get_object_or_404(Voting.objects, pk=pk)
-        if req.user.username is not None:
-            user_name = req.user.username
+        if not (req.user.username in voting.get_users):
+            vote_obj = Vote(user_name=req.user.username, option_num=option, voting_id=voting)
+            vote_obj.save()
+            return redirect('monitor', pk=pk)
         else:
-            user_name = 'Anonymous'
-        vote_obj = Vote(user_name=user_name, option_num=option, voting_id=voting)
-        vote_obj.save()
-        return redirect('monitor', pk=pk)
+            return render(req, self.template_name, {'voting': voting,
+                                                    'error': 'You have already voted!'})
 
 
 class MonitorVotingDetailView(LoginRequiredMixin, View):

@@ -7,6 +7,11 @@ class Voting(models.Model):
     author = models.CharField(max_length=30)
 
     @property
+    def get_users(self):
+        users = self.vote_set.values('user_name')
+        return users.values_list('user_name', flat=True)
+
+    @property
     def get_results(self):
         temp = self.vote_set.values('option_num').annotate(co_numb=Count('option_num'))
         results = [0] * len(self.option_set.all())
