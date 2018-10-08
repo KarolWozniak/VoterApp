@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="{% static 'voter/homepage.css' %}">
-</head>
-<body>
+{% extends 'voter/base.html' %}
+{% load staticfiles%}
+{% block scripts %}
+<link rel="stylesheet" href="{% static 'voter/homepage.css' %}">
+{% endblock %}
+{% block content %}
 <form action="" method="post">
     {% csrf_token %}
     <div class="searchform cf">
-        <input type="text" name="VotingId" placeholder="Search Voting">
+        <input style="color:black" type="text" name="VotingId" placeholder="Search Voting">
         <button type="submit">Search</button>
     </div>
 </form>
@@ -20,4 +17,4 @@
 <p>Dribbble Rebound of <a target="_blank" href="http://dribbble.com/shots/843289-Search-Bar?list=tags&tag=ui">Search Bar</a> by <a target="_blank" href="http://dribbble.com/craftyliang">Liang Shi</a></p>
 </footer>
 </body>
-</html>
+{% endblock %}

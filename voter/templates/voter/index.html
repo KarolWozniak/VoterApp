@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
+{% extends 'voter/base.html' %}
+{% load staticfiles%}
+{% block scripts %}
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
+{% endblock %}
+{% block content %}
 <h1 class="title">VOTING ID : {{voting.id}}</h1>
 <h2 class="title2">Author: {{voting.author}}</h2>
 <form class="form" action="" method="post">
@@ -22,5 +19,4 @@
     <input class="button" type="submit" value="Submit">
 </form>
 <p class="title2">{{error}}</p>
-</body>
-</html>
+{% endblock %}

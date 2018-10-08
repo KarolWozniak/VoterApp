@@ -8,6 +8,8 @@ from accounts import forms
 class RegisterView(View):
 
     def get(self, req):
+        if req.user.is_authenticated:
+            return redirect('/voter/homepage')
         form = forms.UserForm()
         return render(req, 'accounts/register.html', {'form': form})
 
@@ -23,3 +25,11 @@ class RegisterView(View):
             login(req, user)
             return redirect('/voter/edit')
         return render(req, 'accounts/register.html', {'form': form})
+
+
+class LogoutView(View):
+
+    def get(self, req):
+        if req.user.is_authenticated:
+            logout(req)
+            return redirect('login')

@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    {% load static %}
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+{% extends 'voter/base.html' %}
+{% load staticfiles%}
+{% block scripts %}
     <script src="{% static 'voter/monitor.js' %}"></script>
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'voter/homepage.css' %}">
+{% endblock %}
+{% block content %}
 <div id="content">
 <h1>VOTING NUMBER : {{voting.id}}</h1>
 {% for a in voting.get_results %}
@@ -15,5 +12,4 @@
     <p class="values">: {{a.1}}</p>
 {% endfor %}
 </div>
-</body>
-</html>
+{% endblock %}

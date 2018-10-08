@@ -62,7 +62,7 @@ a,a:visited {
 	}
 	.searchform input::-webkit-input-placeholder {
   	font-style: italic;
-  	line-height: 15px
+  	line-height: 15px;
 	}
 
 	.searchform input:-moz-placeholder {

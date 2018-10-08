@@ -8,7 +8,7 @@ class Voting(models.Model):
 
     @property
     def get_users(self):
-        users = self.vote_set.values('user_name')
+        users = self.vote_set.all()
         return users.values_list('user_name', flat=True)
 
     @property
