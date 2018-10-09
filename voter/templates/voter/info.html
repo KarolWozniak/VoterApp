@@ -1,0 +1,24 @@
+{% extends 'voter/base.html' %}
+{% load staticfiles%}
+{% block scripts %}
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
+{% endblock %}
+{% block content %}
+<h1>Your Votings:</h1>
+<ul>
+{% for voting in object_list %}
+    {% if voting.author == user.get_username %}
+    <li><a href ="{%url 'monitor' voting.id%}">{{voting.id}}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+<h1>Your Votes:</h1>
+<ul>
+    {% for vote in votes %}
+        {% if vote.user_name == user.get_username %}
+    <li><a href ="{%url 'monitor' vote.voting_id.id %}">{{vote.voting_id.id}}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% endblock %}

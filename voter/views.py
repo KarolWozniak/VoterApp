@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views import View
 
 from voter.models import Voting, Vote, Option
@@ -67,3 +67,16 @@ class HomepageView(View):
         except ObjectDoesNotExist:
             return render(req, 'voter/homepage.html', {'message': 'There is no Voting with this ID'})
         return redirect('detail', pk=voting_id)
+
+
+class InfoListView(ListView):
+    model = Voting
+    paginate_by = 20
+    template_name = 'voter/info.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InfoListView, self).get_context_data(**kwargs)
+        context['votes'] = Vote.objects.all()
+        return context
+
+
