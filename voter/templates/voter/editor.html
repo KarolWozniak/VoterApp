@@ -14,12 +14,25 @@
             container.appendChild(document.createElement("br"));
             global++;
         }
+        function validate(){
+            var isValid;
+                $("input").each(function() {
+                    var element = $(this);
+                        if (element.val() == "") {
+                            isValid = false;
+                        }
+                });
+            if(isValid==false){
+                alert("There are some empty fields!");
+            }
+            return isValid;
+        }
 </script>
 <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
 {% endblock %}
 {% block content %}
 <button class="button" type="button" onclick="addField()">Add option</button>
-    <form id="container" action="" method="POST">
+    <form id="container" action="" method="POST" onsubmit="return validate()">
         {% csrf_token %}
     <input class="button" type="submit" value="Submit">
     </form>
