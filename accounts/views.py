@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views import View
+from django.contrib.auth.models import Group
 
 from accounts import forms
 
@@ -20,7 +21,9 @@ class RegisterView(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user.set_password(password)
+            group = Group.objects.get(name=form.cleaned_data['group'])
             user.save()
+            user.groups.add(group)
             user = authenticate(username=username, password=password)
             login(req, user)
             return redirect('/voter/edit')
