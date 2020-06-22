@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
 {% endblock %}
 {% block content %}
-<div id="content" class="new">
-        <h1>VOTING NUMBER : {{voting.id}}</h1>
+<div class="panel panel-primary">
+<div class="panel-heading">VOTING NUMBER : {{voting.id}}</div>
+<div class="panel-body">
+<div id="content">
         <br><br>
         <canvas id="funchart" width="400" height="400"></canvas>                      
 
@@ -56,5 +58,7 @@
               }
             } });
         </script>
+</div>
+</div>
 </div>
 {% endblock %}
