@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView
 from django.views import View
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from voter.models import Voting, Vote, Option
-
 
 class VotingDetailView(LoginRequiredMixin, DetailView):
     template_name = 'voter/index.html'
@@ -32,13 +32,10 @@ class MonitorVotingDetailView(LoginRequiredMixin, View):
 
     def get(self, req, pk):
         voting = Voting.objects.get(pk=pk)
-        if req.is_ajax():
-            return JsonResponse(voting.get_results_json, safe=False)
-        else:
-            return render(req, 'voter/monitor.html', {'voting': voting})
+        return render(req, 'voter/monitor.html', {'voting': voting})
 
 
-class EditVotingView(LoginRequiredMixin, View):
+class EditVotingView(UserPassesTestMixin, LoginRequiredMixin, View):
     login_url = '/accounts/login/'
     redirect_field_name = 'redirect_to'
 
@@ -53,6 +50,9 @@ class EditVotingView(LoginRequiredMixin, View):
             temp = Option.objects.create(voting_id=voting, content=value, number=index)
             temp.save()
         return redirect('monitor', pk=voting.id)
+    
+    def test_func(self):
+        return self.request.user.groups.filter(name='Editor').exists()
 
 
 class HomepageView(View):

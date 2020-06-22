@@ -19,7 +19,9 @@
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="{% url 'homepage' %}">Home</a></li>
+      {% if request.user.groups.all.0.name == 'Editor' %}
       <li><a href="{% url 'edit' %}">Editor</a></li>
+      {% endif %}
       <li><a href="{% url 'info' %}">Info</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
