@@ -6,24 +6,24 @@
 {% endblock %}
 {% block content %}
 <div class="panel panel-primary">
-<div class="panel-heading">Your Votings:</div>
+<div class="panel-heading">Twoje głosowania:</div>
 <div class="panel-body">
 <ul class="list-group">
     {% for voting in object_list %}
     {% if voting.author == user.get_username %}
-    <li class="list-group-item"><a href ="{%url 'monitor' voting.id%}">Voting with id {{voting.id}}</a></li>
+    <li class="list-group-item"><a href ="{%url 'monitor' voting.id%}">Głosowanie o identyfikatorze {{voting.id}}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
 </div>
 </div>
 <div class="panel panel-primary">
-        <div class="panel-heading">Your Votes:</div>
+        <div class="panel-heading">Twoje głosy:</div>
         <div class="panel-body">
                 <ul class="list-group">
                         {% for vote in votes %}
                             {% if vote.user_name == user.get_username %}
-                        <li class="list-group-item"><a href ="{%url 'monitor' vote.voting_id.id %}">Voting with id {{vote.voting_id.id}}</a></li>
+                        <li class="list-group-item"><a href ="{%url 'monitor' vote.voting_id.id %}">Głosowanie o identyfikatorze {{vote.voting_id.id}}</a></li>
                         {% endif %}
                     {% endfor %}
                     </ul>

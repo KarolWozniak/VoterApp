@@ -10,7 +10,7 @@ class RegisterView(View):
 
     def get(self, req):
         if req.user.is_authenticated:
-            return redirect('/voter/homepage')
+            return redirect('/voter')
         form = forms.UserForm()
         return render(req, 'accounts/register.html', {'form': form})
 

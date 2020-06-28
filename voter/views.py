@@ -23,7 +23,7 @@ class VotingDetailView(LoginRequiredMixin, DetailView):
             return redirect('monitor', pk=pk)
         else:
             return render(req, self.template_name, {'voting': voting,
-                                                    'error': 'You have already voted!'})
+                                                    'error': 'Oddano juz głos!'})
 
 
 class MonitorVotingDetailView(LoginRequiredMixin, View):
@@ -65,7 +65,7 @@ class HomepageView(View):
         try:
             Voting.objects.get(pk=voting_id)
         except ObjectDoesNotExist:
-            return render(req, 'voter/homepage.html', {'message': 'There is no Voting with this ID'})
+            return render(req, 'voter/homepage.html', {'message': 'Nie ma głosowania o takim identyfikatorze!'})
         return redirect('detail', pk=voting_id)
 
 

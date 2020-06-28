@@ -7,14 +7,11 @@
 <form action="" method="post">
     {% csrf_token %}
     <div class="searchform cf">
-        <input style="color:black" type="text" name="VotingId" placeholder="Search Voting">
-        <button type="submit">Search</button>
+        <input style="color:black" type="text" name="VotingId" placeholder="Szukaj głosowań">
+        <button type="submit">Szukaj</button>
     </div>
 </form>
 <br>
 <p class="info">{{message}}</p>
-<footer>
-<p>Dribbble Rebound of <a target="_blank" href="http://dribbble.com/shots/843289-Search-Bar?list=tags&tag=ui">Search Bar</a> by <a target="_blank" href="http://dribbble.com/craftyliang">Liang Shi</a></p>
-</footer>
 </body>
 {% endblock %}
