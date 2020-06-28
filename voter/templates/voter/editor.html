@@ -1,12 +1,12 @@
 {% extends 'voter/base.html' %}
-{% load staticfiles%}
+{% load static%}
 {% block scripts %}
 <script type='text/javascript'>
     	var global = 0;
         function addField(){
             var container = document.getElementById("container");
             container.appendChild(document.createElement("br"));
-            container.appendChild(document.createTextNode("Option "));
+            container.appendChild(document.createTextNode("Opcja "));
             var input = document.createElement("input");
             input.type = "text";
             input.name = "option";
@@ -31,9 +31,14 @@
 <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
 {% endblock %}
 {% block content %}
-<button class="button" type="button" onclick="addField()">Add option</button>
+<div class="panel panel-primary">
+        <div class="panel-heading">Nowe głosowanie 
+                <button class="button" type="button" onclick="addField()">Dodaj opcje</button>
+                <button class="button" type="submit" value="Submit" form="container">Wyślij</button>
+        </div>
+        <div class="panel-body">
     <form id="container" action="" method="POST" onsubmit="return validate()">
         {% csrf_token %}
-    <input class="button" type="submit" value="Submit">
     </form>
+    </div>
 {% endblock %}

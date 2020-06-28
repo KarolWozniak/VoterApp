@@ -11,8 +11,8 @@
     <form class="register-form" method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button>create</button>
-      <p class="message">Already registered? <a href="{% url 'login' %}">Sign In</a></p>
+      <button>Stwórz</button>
+      <p class="message">Juz zarejestrowany? <a href="{% url 'login' %}">Zaloguj</a></p>
     </form>
   </div>
 {% endblock %}

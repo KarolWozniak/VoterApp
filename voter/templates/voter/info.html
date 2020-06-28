@@ -1,24 +1,32 @@
 {% extends 'voter/base.html' %}
-{% load staticfiles%}
+{% load static%}
 {% block scripts %}
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'voter/main_styles.css' %}">
 {% endblock %}
 {% block content %}
-<h1>Your Votings:</h1>
-<ul>
-{% for voting in object_list %}
+<div class="panel panel-primary">
+<div class="panel-heading">Twoje głosowania:</div>
+<div class="panel-body">
+<ul class="list-group">
+    {% for voting in object_list %}
     {% if voting.author == user.get_username %}
-    <li><a href ="{%url 'monitor' voting.id%}">{{voting.id}}</a></li>
+    <li class="list-group-item"><a href ="{%url 'monitor' voting.id%}">Głosowanie o identyfikatorze {{voting.id}}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
-<h1>Your Votes:</h1>
-<ul>
-    {% for vote in votes %}
-        {% if vote.user_name == user.get_username %}
-    <li><a href ="{%url 'monitor' vote.voting_id.id %}">{{vote.voting_id.id}}</a></li>
-    {% endif %}
-{% endfor %}
-</ul>
+</div>
+</div>
+<div class="panel panel-primary">
+        <div class="panel-heading">Twoje głosy:</div>
+        <div class="panel-body">
+                <ul class="list-group">
+                        {% for vote in votes %}
+                            {% if vote.user_name == user.get_username %}
+                        <li class="list-group-item"><a href ="{%url 'monitor' vote.voting_id.id %}">Głosowanie o identyfikatorze {{vote.voting_id.id}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+        </div>
+        </div>
 {% endblock %}
